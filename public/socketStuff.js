@@ -19,7 +19,6 @@ socket.on('initReturn', (data) => {
 
 socket.on('tock', (data) => {
     players = data.players;
-
 });
 
 socket.on('orbSwitch', (data) => {

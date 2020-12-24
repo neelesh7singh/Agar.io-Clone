@@ -27,6 +27,12 @@ function initGame() {
 
 initGame();
 
+setInterval(() => {
+    io.to('game').emit('tock', {
+        players,
+    });
+}, 33); // 1/30 of 1 sec
+
 io.sockets.on('connect', (socket) => {
     socket.on('init', (data) => {
         socket.join('game');
@@ -35,8 +41,7 @@ io.sockets.on('connect', (socket) => {
         player = new Player(socket.id, playerData, playerConfig);
 
         setInterval(() => {
-            io.to('game').emit('tock', {
-                players,
+            socket.emit('ticktock', {
                 playerX: player.playerData.locX,
                 playerY: player.playerData.locY,
             });

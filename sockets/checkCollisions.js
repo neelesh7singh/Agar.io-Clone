@@ -74,16 +74,17 @@ function checkForPlayerCollisions(pData, pConfig, players) {
                             players.splice(i, 1);
                             resolve(collisionData);
 
-                        } else if (pData.radius < pR) {
-                            let collisionData = updateScores(curPlayer, pData);
-                            players.forEach((p, i) => {
-                                console.log(players[i].name, i)
-                                if (pData.uid == p.uid) {
-                                    players.splice(i, 1);
-                                }
-                            });
-                            resolve(collisionData);
                         }
+                        // else if (pData.radius < pR) {
+                        //     let collisionData = updateScores(curPlayer, pData);
+                        //     players.forEach((p, i) => {
+                        //         console.log(players[i].name, i)
+                        //         if (pData.uid == p.uid) {
+                        //             players.splice(i, 1);
+                        //         }
+                        //     });
+                        //     resolve(collisionData);
+                        // }
                     }
                 }
             }
