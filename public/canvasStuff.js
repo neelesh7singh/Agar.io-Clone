@@ -7,7 +7,6 @@ function draw() {
     context.clearRect(0, 0, canvas.width, canvas.height);
     const camx = -player.locX + canvas.width / 2;
     const camy = -player.locY + canvas.height / 2;
-    console.log(player);
     if (player.isAlive) {
         context.translate(camx, camy);
     }
