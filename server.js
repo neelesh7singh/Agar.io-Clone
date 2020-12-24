@@ -7,10 +7,6 @@ const expressServer = app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
 const io = socketio(expressServer);
-io.configure(function () {
-    io.set("transports", ["xhr-polling"]);
-    io.set("polling duration", 10);
-});
 const helmet = require('helmet');
 app.use(helmet());
 
