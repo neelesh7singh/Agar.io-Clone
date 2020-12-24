@@ -1,4 +1,4 @@
-let socket = io.connect('https://agar-io-clone7.herokuapp.com/');
+let socket = io.connect('ws://agar-io-clone7.herokuapp.com/');
 
 function init() {
     draw();
