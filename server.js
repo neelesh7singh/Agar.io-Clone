@@ -2,9 +2,9 @@ const express = require('express');
 const app = express();
 app.use(express.static(__dirname + '/public'));
 const socketio = require('socket.io');
-const port = 80
-const expressServer = app.listen(port, () => {
-    console.log('Server listening on port 80');
+const PORT = process.env.PORT || 3000;
+const expressServer = app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
 });
 const io = socketio(expressServer);
 const helmet = require('helmet');

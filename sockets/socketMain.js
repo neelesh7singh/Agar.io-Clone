@@ -41,6 +41,7 @@ initGame();
 
 io.sockets.on('connect', (socket) => {
     socket.on('init', (data) => {
+        console.log('Rq recived');
         socket.join('game');
         let playerConfig = new PlayerConfig(settings);
         let playerData = new PlayerData(data.playerName, settings, socket.id);
