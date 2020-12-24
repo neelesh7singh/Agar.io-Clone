@@ -1,5 +1,5 @@
-let socket = io.connect();
-// location.origin.replace(/^http/, 'ws')
+let socket = io.connect('http://localhost:80');
+
 function init() {
     draw();
     socket.emit('init', {
