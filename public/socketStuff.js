@@ -30,3 +30,21 @@ socket.on('orbSwitch', (data) => {
         orbs.splice(obj.index, 1, obj.orb);
     })
 })
+
+socket.on('updateLeaderBord', (data) => {
+    document.querySelector('.leader-board').innerHTML = "";
+    data.forEach((currPlayer) => {
+        document.querySelector('.leader-board').innerHTML += `<li class="leaderboadr-player">${currPlayer.name} - ${currPlayer.score}</li>`
+    })
+})
+
+socket.on('playerDeath', (data) => {
+    if (data.died.uid == socket.id) player.isAlive = false;
+    document.querySelector('#game-message').innerHTML = `${data.died.name} absorbed by ${data.killedBy.name}`
+    $('#game-message').css({
+        "background-color": "#00e6e6",
+        "opacity": 1
+    });
+    $('#game-message').show();
+    $('#game-message').fadeOut(5000);
+})

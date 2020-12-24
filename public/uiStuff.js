@@ -16,6 +16,7 @@ $(window).load(() => {
 $('.name-form').submit((event) => {
     event.preventDefault();
     player.name = document.querySelector('#name-input').value;
+    player.isAlive = true;
     $('#loginModal').modal('hide');
     $('#spawnModal').modal('show');
     document.querySelector('.player-name').innerHTML = player.name;

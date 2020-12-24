@@ -46,11 +46,12 @@ function checkForOrbCollisions(pData, pConfig, orbs, settings) {
     });
 }
 
-function checkForPlayerCollisions(pData, pConfig, players) {
+function checkForPlayerCollisions(pData, pConfig, players, playerId) {
     return new Promise((resolve, reject) => {
         //PLAYER COLLISIONS	
         players.forEach((curPlayer, i) => {
-            if (curPlayer.uid != pData.uid) {
+            // console.log(curPlayer.uid)
+            if (curPlayer.uid != playerId) {
                 // console.log(curPlayer.uid,pData.uid)
                 let pLocx = curPlayer.locX
                 let pLocy = curPlayer.locY

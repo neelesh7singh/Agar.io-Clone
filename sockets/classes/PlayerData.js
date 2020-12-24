@@ -1,5 +1,5 @@
 class PlayerData {
-    constructor(playerName, settings) {
+    constructor(playerName, settings, id) {
         this.name = playerName;
         this.locX = Math.floor(Math.random() * settings.worldWidth + 100);
         this.locY = Math.floor(Math.random() * settings.worldHeight + 100);
@@ -7,6 +7,7 @@ class PlayerData {
         this.color = this.getRandomColor();
         this.score = 0;
         this.orbsAbsorbed = 0;
+        this.uid = id;
     }
     getRandomColor() {
         const r = Math.floor((Math.random() * 200) + 50);

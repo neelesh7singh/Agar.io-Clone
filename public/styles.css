@@ -105,6 +105,10 @@ canvas {
   color: #ffffff;
 }
 
+.fix {
+  margin-right: 25% !important;
+}
+
 #join-team-btn,
 #play-solo-btn,
 #create-team-btn,

@@ -12,9 +12,9 @@ let orbs = []
 let players = []
 let playersObj = []
 let settings = {
-    defaultOrbs: 5000,
-    defaultSpeed: 6,
-    defaultSize: 6,
+    defaultOrbs: 700,
+    defaultSpeed: 10,
+    defaultSize: 7,
     defaultZoom: 1.5,
     worldWidth: 5000,
     worldHeight: 5000,
@@ -26,18 +26,24 @@ function initGame() {
     }
 }
 
-initGame();
+function getLeaderBord() {
+    players.sort((a, b) => b.score - a.score);
+    let leaderBord = players.map((curPlayer) => {
+        return {
+            name: curPlayer.name,
+            score: curPlayer.score
+        }
+    })
+    return leaderBord;
+}
 
-// setInterval(() => {
-//     io.to('game').emit('tock', {
-//     });
-// }, 33); // 1/30 of 1 sec
+initGame();
 
 io.sockets.on('connect', (socket) => {
     socket.on('init', (data) => {
         socket.join('game');
         let playerConfig = new PlayerConfig(settings);
-        let playerData = new PlayerData(data.playerName, settings);
+        let playerData = new PlayerData(data.playerName, settings, socket.id);
         player = new Player(socket.id, playerData, playerConfig);
 
         setInterval(() => {
@@ -76,19 +82,30 @@ io.sockets.on('connect', (socket) => {
         // Orb collision check
         let capturedOrb = checkForOrbCollisions(player.playerData, player.playerConfig, orbs, settings);
         capturedOrb.then((data) => {
-            // console.log(data);
             io.sockets.emit('orbSwitch', {
                 orbs: data
             })
-        }).catch((err) => {
-            // console.log('Orb Collision Not Detected')
-        })
+            io.sockets.emit('updateLeaderBord', getLeaderBord())
+        }).catch((e) => { })
         // Player collision check
-        let playerDeath = checkForPlayerCollisions(player.playerData, player.playerConfig, players);
+        let playerDeath = checkForPlayerCollisions(player.playerData, player.playerConfig, players, player.socketId);
         playerDeath.then((data) => {
-            console.log('player collision')
-        }).catch((err) => {
+            io.sockets.emit('updateLeaderBord', getLeaderBord())
+            io.sockets.emit('playerDeath', data);
+        }).catch((e) => { })
+    })
 
+    socket.on('disconnect', (data) => {
+        // console.log(data)
+        if (!player.playerData) return
+        players.forEach((player, i) => {
+            if (player.uid == socket.id)
+                players.splice(i, 1);
+        })
+        playersObj.forEach((player, i) => {
+            if (player.socketId == socket.id)
+                players.splice(i, 1);
+            io.sockets.emit('updateLeaderBord', getLeaderBord())
         })
     })
 })
