@@ -11,6 +11,7 @@ socket.on('initReturn', (data) => {
     orbs = data.orbs;
     setInterval(() => {
         socket.emit('tick', {
+            id: socket.id,
             xVector: player.xVector,
             yVector: player.yVector,
         })
@@ -18,16 +19,14 @@ socket.on('initReturn', (data) => {
 })
 
 socket.on('tock', (data) => {
+    if (data.id != socket.id) return;
     players = data.players;
+    player.locX = data.playerX;
+    player.locY = data.playerY;
 });
 
 socket.on('orbSwitch', (data) => {
-    // console.log(data);
-    orbs.splice(data.orbIndex, 1, data.newOrb);
-    // console.log(orbs);
-})
-
-socket.on('ticktock', (data) => {
-    player.locX = data.playerX;
-    player.locY = data.playerY;
+    data.orbs.forEach(obj => {
+        orbs.splice(obj.index, 1, obj.orb);
+    })
 })

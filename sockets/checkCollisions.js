@@ -4,6 +4,7 @@ const io = require('../server').io;
 function checkForOrbCollisions(pData, pConfig, orbs, settings) {
     return new Promise((resolve, reject) => {
         //ORB COLLISIONS
+        changedOrbs = [];
         orbs.forEach((orb, i) => {
             // console.log("CHECK FOR COLLISIONS")
             // AABB Test(square)  - Axis-aligned bounding boxes
@@ -33,11 +34,12 @@ function checkForOrbCollisions(pData, pConfig, orbs, settings) {
                     // we have to keep orbs updated for new players
                     // we just dont want to push them out more than we have to
                     orbs.splice(i, 1, new Orb(settings))
+                    changedOrbs.push({ index: i, orb: orbs[i] });
                     // can't hit more than one orb on a tick so return
-                    resolve(i)
                 }
             }
         });
+        if (changedOrbs.length > 0) resolve(changedOrbs);
         // if we got out of the loop, there was no collision.
         // Reject promise
         reject()

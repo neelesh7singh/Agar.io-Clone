@@ -10,6 +10,7 @@ const checkForPlayerCollisions = require('./checkCollisions').checkForPlayerColl
 let player = {}
 let orbs = []
 let players = []
+let playersObj = []
 let settings = {
     defaultOrbs: 5000,
     defaultSpeed: 6,
@@ -27,11 +28,10 @@ function initGame() {
 
 initGame();
 
-setInterval(() => {
-    io.to('game').emit('tock', {
-        players,
-    });
-}, 33); // 1/30 of 1 sec
+// setInterval(() => {
+//     io.to('game').emit('tock', {
+//     });
+// }, 33); // 1/30 of 1 sec
 
 io.sockets.on('connect', (socket) => {
     socket.on('init', (data) => {
@@ -41,7 +41,9 @@ io.sockets.on('connect', (socket) => {
         player = new Player(socket.id, playerData, playerConfig);
 
         setInterval(() => {
-            socket.emit('ticktock', {
+            socket.emit('tock', {
+                id: player.socketId,
+                players,
                 playerX: player.playerData.locX,
                 playerY: player.playerData.locY,
             });
@@ -51,9 +53,14 @@ io.sockets.on('connect', (socket) => {
             orbs
         });
         players.push(playerData);
+        playersObj.push(player);
     })
     socket.on('tick', (data) => {
         if (!player.playerConfig) return;
+        playersObj.forEach(p => {
+            if (p.socketId == data.id)
+                player = p;
+        });
         speed = player.playerConfig.speed;
         yV = player.playerConfig.yVector = data.yVector;
         xV = player.playerConfig.xVector = data.xVector;
@@ -69,12 +76,9 @@ io.sockets.on('connect', (socket) => {
         // Orb collision check
         let capturedOrb = checkForOrbCollisions(player.playerData, player.playerConfig, orbs, settings);
         capturedOrb.then((data) => {
-            const orbData = {
-                orbIndex: data,
-                newOrb: orbs[data],
-            }
+            // console.log(data);
             io.sockets.emit('orbSwitch', {
-                ...orbData
+                orbs: data
             })
         }).catch((err) => {
             // console.log('Orb Collision Not Detected')
