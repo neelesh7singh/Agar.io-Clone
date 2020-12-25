@@ -1,4 +1,4 @@
-let socket = io.connect(location.origin);
+let socket = io.connect(location.origin.replace(/^http/, 'ws'));
 
 function init() {
     draw();
